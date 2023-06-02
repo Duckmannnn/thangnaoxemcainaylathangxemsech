@@ -5,8 +5,8 @@
 #define fl(i,d,c) for(ll i=d;i>=c;i--)
 using namespace std;
     
-ll n,k,a[1000009],b[1000009],c[1000009],d[1000009],e[1000009],m[1000009],d2[1000009],dd,g=1e16,kq;
-
+ll n,k,dl,dp[1009][5009],kt[1009][5009];
+string s;
 void solve() {
     
 }
@@ -19,60 +19,45 @@ int32_t main() {
     //freopen("a.out","w",stdout);
     //initialize
     cin >> n >> k;
-    fr(i,1,n)
-    {
-      cin>>a[i];
-      d[i]=a[i];
-    }
-    fr(i,1,n)
-    {
-      cin>>b[i];
-      c[i]=b[i];
-    }
-    fr(dcm,1,n)
-    {
-      dd=0;  
-      kq=dcm-1;   
-      fr(i,1,n)
-      {
-        if(d[i]>c[i])
-        {
-          dd=1;
-        }
-      }
-      if(dd) 
-      {
-        fr(i,1,n)
-        {
-          if(d[i]<=c[i]) d[i]+=k+1;    
-          else c[i]+=k+1;
-        }
-      }
-      fr(i,1,n)    m[i]=c[i]-d[i];
-      sort(m+1,m+n+1);
-      fr(i,1,n)    kq+=m[i]-m[1];
-      kq+=m[1];      
-      g=min(g,kq);      
+    cin>>s;
+    dp[0][k]=1;
+    fr(i,1,n){
+        if(s[i-1]=='?'){
 
-      kq=dcm-1;
-      fr(i,1,n)    m[i]=c[i]-d2[i];
-      sort(m+1,m+n+1);
-      fr(i,1,n)    kq+=m[i]-m[1];
-      kq+=m[1];      
-      g=min(g,kq);
+            if(i==n){
+                fr(j,0,k*2){
+                    dp[i][j]=dp[i-1][j+1]+dp[i-1][j]+dp[i-1][j-1];
+                    if(dp[i-1][j+1]) 
+                    {
+                        dp[i][j]=dp[i-1][j+1]
+                    }
+                }
+            }
+            else {
+                fr(j,1,2*k-1){
+                    dp[i][j]=dp[i-1][j+1]+dp[i-1][j]+dp[i-1][j-1];
+                }
+            }
 
-      e[1]=a[n];
-      fr(i,1,n-1)
-      {
-        e[i+1]=a[i];
-      }
-      fr(i,1,n)
-      {
-        a[i]=e[i];
-        d[i]=e[i];
-        d2[i]=e[i];
-        c[i]=b[i];
-      }
+        }
+        else{
+
+            if(i==n){
+                fr(j,0,k*2){
+                    if(s[i-1]=='D') dp[i][j]=dp[i-1][j];
+                    if(s[i-1]=='L') dp[i][j]=dp[i-1][j+1];
+                    if(s[i-1]=='W') dp[i][j]=dp[i-1][j-1];
+                }
+            }
+            else {
+                fr(j,1,2*k-1){
+                    if(s[i-1]=='D') dp[i][j]=dp[i-1][j];
+                    if(s[i-1]=='L') dp[i][j]=dp[i-1][j+1];
+                    if(s[i-1]=='W') dp[i][j]=dp[i-1][j-1];
+                }
+            }
+
+        }
     }
-    cout<<g;
+    cout<<dp[n][2*k]<<" "<<dp[n][0]<<'\n';
 }
